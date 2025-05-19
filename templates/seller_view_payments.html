@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Payment History</title>
+    <link href="https://cdn.jsdelivr.net/npm/lucide-static@0.321.0/font/lucide.min.css" rel="stylesheet">
+    <style>
+        /* Payment Table Styling */
+        .payment-table {
+            width: 100%;
+            max-width: 1000px;
+            margin: 20px auto;
+            border-collapse: collapse;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+        
+        .payment-table th, 
+        .payment-table td {
+            border: 2px solid #8b4513;
+            padding: 10px;
+            text-align: center;
+            vertical-align: middle;
+        }
+        
+        .payment-table th {
+            background-color: #f1b890;
+            font-weight: bold;
+            color: #333;
+        }
+        
+        .payment-table tr:nth-child(even) {
+            background-color: #f9f1e3;
+        }
+        
+        .payment-table tr:hover {
+            background-color: #f1d0a0;
+            transition: background-color 0.3s ease;
+        }
+        
+        /* Status Styling */
+        .payment-status {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 5px;
+        }
+        
+        .payment-status-icon {
+            width: 20px;
+            height: 20px;
+        }
+        
+        .status-pending {
+            color: orange;
+            font-weight: bold;
+        }
+        
+        .status-completed {
+            color: green;
+            font-weight: bold;
+        }
+        
+        .status-failed {
+            color: red;
+            font-weight: bold;
+        }
+        
+        /* Amount Styling */
+        .payment-amount {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 5px;
+        }
+        
+        .currency-icon {
+            color: #8b4513;
+        }
+        
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .payment-table {
+                font-size: 0.9em;
+            }
+        }
+    </style>
+</head>
+<body>
+    {%include 'sellers_header.html'%}
+
+    <br><br><br><br><br>
+
+    <table class="payment-table" border="2">
+        <tr>
+            <th>SL.NO</th>
+            <th>Amount</th>
+            <th>Date</th>
+            <th>Status</th>
+        </tr>
+
+        {%for i in data['view']%}
+        <tr>
+            <td>{{loop.index}}</td>
+            <td>
+                <div class="payment-amount">
+                    <i class="lucide lucide-dollar-sign currency-icon"></i>
+                    {{i['amount']}}
+                </div>
+            </td>
+            <td>
+                <div class="payment-amount">
+                    <i class="lucide lucide-calendar-days"></i>
+                    {{i['date']}}
+                </div>
+            </td>
+            <td>
+                <div class="payment-status">
+                    {%if i['status'] == 'Pending' %}
+                    <i class="lucide lucide-clock payment-status-icon"></i>
+                    <span class="status-pending">{{i['status']}}</span>
+                    {%elif i['status'] == 'Completed' %}
+                    <i class="lucide lucide-check-circle payment-status-icon"></i>
+                    <span class="status-completed">{{i['status']}}</span>
+                    {%else%}
+                    <i class="lucide lucide-x-circle payment-status-icon"></i>
+                    <span class="status-failed">{{i['status']}}</span>
+                    {%endif%}
+                </div>
+            </td>
+        </tr>
+        {%endfor%}
+    </table>
+
+    {%include 'footer.html'%}
+
+    <script src="https://cdn.jsdelivr.net/npm/lucide-static@0.321.0/icons.min.js"></script>
+</body>
+</html>

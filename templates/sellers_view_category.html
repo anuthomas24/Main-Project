@@ -1,0 +1,41 @@
+
+
+
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+
+    {%include 'sellers_header.html'%}
+
+<center>
+    <table  border="2"  style="margin-top: 250px; width: 1200PX;">
+
+        <tr>
+            <th>Sl.No</th>
+            <th>Category Name</th>
+        </tr>
+
+        {%for i in data['category']%}
+        <tr>
+            <td>{{loop.index}}</td>
+            <td>{{i['category_name']}}</td>
+            <td><a href="/seller_add_product?id={{i['category_id']}}" class="btn btn-success">Add Product</a></td>
+        </tr>
+
+        {%endfor%}
+
+    </table>
+</center>
+
+    {%include 'footer.html'%}
+
+
+</body>
+</html>
+
+
+

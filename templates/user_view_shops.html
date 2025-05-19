@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Seller List</title>
+    <style>
+   
+
+        table {
+            width: 1200px;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+            border: 2px solid #8b4513;
+        }
+
+        table th {
+            background-color: #8b4513;
+            color: #f1b890;
+            padding: 12px;
+            text-align: left;
+        }
+
+        table td {
+            border: 1px solid #8b4513;
+            padding: 10px;
+            background-color: #f1b890;
+        }
+
+        table tr:nth-child(even) td {
+            background-color: #e6b479;
+        }
+
+        table tr:hover td {
+            background-color: #d4a36c;
+        }
+    </style>
+</head>
+<body>
+    {%include 'users_header.html'%}
+<center>
+    <br><br><br><br><br>
+
+    <table border="2">
+        <tr>
+            <th>Sl.No</th>
+            <th>Seller Name</th>
+            <th>Place</th>
+            <th>Phone</th>
+            <th>Email</th>
+            <th></th>
+        </tr>
+
+        {%for i in data['seller']%}
+        <tr>
+            <td>{{loop.index}}</td>
+            <td>{{i['seller_name']}}</td>
+            <td>{{i['place']}}</td>
+            <td>{{i['phone']}}</td>
+            <td>{{i['email']}}</td>
+            <td><a href="/user_chat_sellers?id={{i['seller_id']}}" class="btn btn-info">Chat With Seller</a></td>
+        </tr>
+        {%endfor%}
+    </table>
+</center>
+
+<br><br><br><br>
+    {%include 'footer.html'%}
+</body>
+</html>

@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Product List</title>
+    <style>
+        /* Form Styling */
+        form {
+            max-width: 500px;
+            margin: 20px auto;
+            padding: 20px;
+            background-color: #f1b890;
+            border: 2px solid #8b4513;
+            border-radius: 8px;
+        }
+
+        form table {
+            width: 100%;
+            border: none;
+        }
+
+        form input[type="text"] {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #8b4513;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+
+        form input[type="submit"] {
+            background-color: #8b4513;
+            color: #f1b890;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        form input[type="submit"]:hover {
+            background-color: #6b3307;
+        }
+
+        /* Product Table Styling */
+        .product-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        .product-table th {
+            background-color: #8b4513;
+            color: #f1b890;
+            padding: 12px;
+            text-align: left;
+        }
+
+        .product-table td {
+            border: 1px solid #8b4513;
+            padding: 10px;
+            background-color: #f1b890;
+        }
+
+        .product-table tr:nth-child(even) td {
+            background-color: #e6b479;
+        }
+
+        .product-table tr:hover td {
+            background-color: #d4a36c;
+        }
+
+        /* Buy Product Link Styling */
+        .product-table .buy-link {
+            display: inline-block;
+            background-color: #8b4513;
+            color: #f1b890;
+            padding: 8px 12px;
+            text-decoration: none;
+            border-radius: 4px;
+            transition: background-color 0.3s ease;
+        }
+
+        .product-table .buy-link:hover {
+            background-color: #6b3307;
+        }
+
+        /* Image Styling */
+        .product-table img {
+            max-width: 250px;
+            max-height: 250px;
+            object-fit: cover;
+            border: 2px solid #8b4513;
+            border-radius: 4px;
+        }
+    </style>
+</head>
+<body>
+    {%include 'users_header.html'%}
+
+<br><br><br><br><br>
+
+<center>
+    <table class="product-table" border="2"  style="width: 1200px;">
+        <tr>
+            <th>Sl.No</th>
+            <th>Bid Amount</th>
+            <th>Date</th>
+        </tr>
+
+        {%for i in data['view']%}
+        <tr>
+            <td>{{loop.index}}</td>
+            <td>{{i['bid_amount']}}</td>
+            <td>{{i['date']}}</td>
+        </tr>
+        {%endfor%}
+    </table>
+</center>
+
+    {%include 'footer.html'%}

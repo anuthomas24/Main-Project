@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vintage Treasures - Antique Marketplace</title>
+    
+    <!-- Bootstrap CSS -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
+    
+    <style>
+        body {
+            font-family: 'Serif', Georgia, serif;   
+            background-color: #f4f1de;
+            color: #3d405b;
+        }
+        .navbar {
+            background-color: #f1b890;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .navbar-brand {
+            color: #f4f1de !important;
+            font-weight: bold;
+            font-size: 1.5rem;
+        }
+        .navbar-nav .nav-link {
+            color: #f4f1de !important;
+            margin-right: 15px;
+            transition: color 0.3s ease;
+        }
+        .navbar-nav .nav-link:hover {
+            color: #d9b382 !important;
+        }
+        .carousel-item {
+            height: 100vh;
+            min-height: 300px;
+            background: no-repeat center center scroll;
+            background-size: cover;
+            position: relative;
+        }
+        .carousel-caption {
+            background: rgba(0,0,0,0.5);
+            padding: 20px;
+            border-radius: 10px;
+        }
+        .feature-section {
+            padding: 50px 0;
+            text-align: center;
+            background-color: #f4f1de;
+        }
+        .feature-icon {
+            font-size: 3rem;
+            color: #8b4513;
+            margin-bottom: 20px;
+        }
+        .overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            height: 100%;
+            width: 100%;
+            background-color: rgba(176, 174, 174, 0.5);
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-dark fixed-top">
+        <div class="container">
+            <a class="navbar-brand" href="/">Vintage Treasures</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="/">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/public_user_registration">User</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/public_seller_registration">Seller</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/login">Login</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Carousel Hero Section -->
+    <div id="heroCarousel" class="carousel slide" data-bs-ride="carousel">
+        <div class="carousel-indicators">
+            <button type="button" data-bs-target="#heroCarousel" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
+            <button type="button" data-bs-target="#heroCarousel" data-bs-slide-to="1" aria-label="Slide 2"></button>
+            <button type="button" data-bs-target="#heroCarousel" data-bs-slide-to="2" aria-label="Slide 3"></button>
+        </div>
+        <div class="carousel-inner">
+            <div class="carousel-item active" style="background-image: url('/static/background_slider_1.jpg')">
+                <div class="overlay"></div>
+                <div class="carousel-caption text-center">
+                    <h1 class="display-4">Discover Timeless Treasures</h1>
+                    <p class="lead">Vintage Antiques with Stories to Tell</p>
+                    <a href="/public_user_registration" class="btn btn-light btn-lg mt-3">Explore Collection</a>
+                </div>
+            </div>
+            <div class="carousel-item" style="background-image: url('/static/background_slider_2.jpg')">
+                <div class="overlay"></div>
+                <div class="carousel-caption text-center">
+                    <h1 class="display-4">Rare Collectibles</h1>
+                    <p class="lead">Unique Pieces from Around the World</p>
+                    <a href="/public_seller_registration" class="btn btn-light btn-lg mt-3">Sell Your Antiques</a>
+                </div>
+            </div>
+            <div class="carousel-item" style="background-image: url('/static/background_slider_3.jpg')">
+                <div class="overlay"></div>
+                <div class="carousel-caption text-center">
+                    <h1 class="display-4">Preserve History</h1>
+                    <p class="lead">Connect with Authentic Vintage Pieces</p>
+                    <a href="/login" class="btn btn-light btn-lg mt-3">Join Now</a>
+                </div>
+            </div>
+        </div>
+        <button class="carousel-control-prev" type="button" data-bs-target="#heroCarousel" data-bs-slide="prev">
+            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Previous</span>
+        </button>
+        <button class="carousel-control-next" type="button" data-bs-target="#heroCarousel" data-bs-slide="next">
+            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Next</span>
+        </button>
+    </div>
+
+    <!-- Features Section -->
+    <div class="feature-section container">
+        <div class="row">
+            <div class="col-md-4">
+                <div class="feature-icon">🏺</div>
+                <h3>Curated Collections</h3>
+                <p>Handpicked antiques from trusted sellers around the world.</p>
+            </div>
+            <div class="col-md-4">
+                <div class="feature-icon">🔍</div>
+                <h3>Authenticity Guaranteed</h3>
+                <p>Every item is verified for its historical significance and condition.</p>
+            </div>
+            <div class="col-md-4">
+                <div class="feature-icon">💼</div>
+                <h3>Easy Selling</h3>
+                <p>List and sell your vintage items with our simple, secure platform.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap JS and dependencies -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
+
+{%include 'footer.html'%}

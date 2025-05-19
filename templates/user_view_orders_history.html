@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Product View</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 20px;
+        }
+
+        .product-table {
+            width: 100%;
+            border-collapse: collapse;
+            background-color: white;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            overflow: hidden;
+            border-radius: 8px;
+        }
+
+        .product-table th {
+            background-color: #8b4513;
+            color: #f1b890;
+            padding: 15px;
+            text-align: left;
+            font-weight: bold;
+        }
+
+        .product-table tr {
+            transition: background-color 0.3s ease;
+        }
+
+        .product-table td {
+            padding: 15px;
+            border-bottom: 1px solid #ddd;
+            background-color: #f1b890;
+        }
+
+        .product-table tr:nth-child(even) {
+            background-color: #e6b479;
+        }
+
+        .product-table tr:hover {
+            background-color: #d4a36c;
+        }
+
+        .product-table img {
+            max-width: 250px;
+            max-height: 250px;
+            object-fit: cover;
+            border-radius: 8px;
+            transition: transform 0.3s ease;
+        }
+
+        .product-table img:hover {
+            transform: scale(1.1);
+            cursor: pointer;
+        }
+
+        .rating-link {
+            display: inline-block;
+            background-color: #8b4513;
+            color: #f1b890;
+            padding: 8px 15px;
+            text-decoration: none;
+            border-radius: 4px;
+            transition: background-color 0.3s ease;
+        }
+
+        .rating-link:hover {
+            background-color: #6b3307;
+        }
+
+        .status-badge {
+            display: inline-block;
+            padding: 5px 10px;
+            border-radius: 4px;
+            font-weight: bold;
+        }
+
+        .status-completed {
+            background-color: #4CAF50;
+            color: white;
+        }
+
+        .status-pending {
+            background-color: #FF9800;
+            color: white;
+        }
+
+        .status-cancelled {
+            background-color: #F44336;
+            color: white;
+        }
+
+        .search-container {
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .search-input {
+            width: 300px;
+            padding: 10px;
+            border: 2px solid #8b4513;
+            border-radius: 4px;
+            font-size: 16px;
+        }
+    </style>
+</head>
+<body>
+    {%include 'users_header.html'%}
+<br><br><br>
+    <div class="search-container">
+        <input type="text" id="searchInput" class="search-input" placeholder="Search products...">
+    </div>
+
+    <table class="product-table" border="2">
+        <thead>
+            <tr>
+                <th>Sl.No</th>
+                <th>Product Name</th>
+                <th>Description</th>
+                <th>Images</th>
+                <th>Date</th>
+                <th>Status</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody id="productTableBody">
+            {%for i in data['view']%}
+            <tr>
+                <td>{{loop.index}}</td>
+                <td>{{i['product_name']}}</td>
+                <td>{{i['description']}}</td>
+                <td>
+                    <img src="{{i['image']}}" alt="Product Image" onclick="openImageModal('{{i['image']}}')">
+                </td>
+                <td>{{i['date']}}</td>
+                <td>
+                    <span class="status-badge 
+                        {%if i['status'] == 'Completed' %}status-completed
+                        {%elif i['status'] == 'Pending' %}status-pending
+                        {%elif i['status'] == 'Cancelled' %}status-cancelled
+                        {%endif%}">
+                        {{i['status']}}
+                    </span>
+                </td>
+                <td><a href="/user_add_rating?id={{i['product_id']}}" class="rating-link">Rating</a></td>
+            </tr>
+            {%endfor%}
+        </tbody>
+    </table>
+
+    <!-- Image Modal -->
+    <div id="imageModal" style="display:none; position:fixed; z-index:1000; left:0; top:0; width:100%; height:100%; background-color:rgba(0,0,0,0.9); text-align:center;">
+        <span onclick="closeImageModal()" style="position:absolute; top:15px; right:35px; color:white; font-size:40px; cursor:pointer;">&times;</span>
+        <img id="modalImage" style="max-width:90%; max-height:90%; margin:auto; display:block; margin-top:5%;">
+    </div>
+
+    {%include 'footer.html'%}
+
+    <script>
+        // Image Modal Functions
+        function openImageModal(src) {
+            const modal = document.getElementById('imageModal');
+            const modalImg = document.getElementById('modalImage');
+            modal.style.display = "block";
+            modalImg.src = src;
+        }
+
+        function closeImageModal() {
+            document.getElementById('imageModal').style.display = "none";
+        }
+
+        // Search Functionality
+        document.getElementById('searchInput').addEventListener('input', function() {
+            const searchTerm = this.value.toLowerCase();
+            const rows = document.querySelectorAll('#productTableBody tr');
+
+            rows.forEach(row => {
+                const cells = row.getElementsByTagName('td');
+                let shouldShow = false;
+
+                for (let cell of cells) {
+                    if (cell.textContent.toLowerCase().includes(searchTerm)) {
+                        shouldShow = true;
+                        break;
+                    }
+                }
+
+                row.style.display = shouldShow ? '' : 'none';
+            });
+        });
+
+        // Status Color Dynamic Functionality
+        function updateStatusColors() {
+            const statusBadges = document.querySelectorAll('.status-badge');
+            statusBadges.forEach(badge => {
+                const status = badge.textContent.trim();
+                badge.classList.remove('status-completed', 'status-pending', 'status-cancelled');
+                
+                switch(status) {
+                    case 'Completed':
+                        badge.classList.add('status-completed');
+                        break;
+                    case 'Pending':
+                        badge.classList.add('status-pending');
+                        break;
+                    case 'Cancelled':
+                        badge.classList.add('status-cancelled');
+                        break;
+                }
+            });
+        }
+
+        // Run on page load
+        document.addEventListener('DOMContentLoaded', updateStatusColors);
+    </script>
+</body>
+</html>

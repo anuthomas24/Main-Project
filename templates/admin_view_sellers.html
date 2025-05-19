@@ -1,0 +1,58 @@
+
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    
+    
+    {%include 'admin_header.html'%}
+
+    <center>
+
+    <table  border="2"  style="margin-top: 200px; width: 1200px;">
+
+        <tr>
+            <th>Sl.No</th>
+            <th>Seller Name</th>
+            <th>Place</th>
+            <th>Phone</th>
+            <th>Email</th>
+            <th>Licence Number</th>
+            <th>Status</th>
+        </tr>
+
+        {%for i in data['view']%}
+        <tr>
+
+            <td>{{loop.index}}</td>
+            <td>{{i['seller_name']}}</td>
+            <td>{{i['place']}}</td>
+            <td>{{i['phone']}}</td>
+            <td>{{i['email']}}</td>
+            <td>{{i['licence_number']}}</td>
+            <td>{{i['usertype']}}</td>
+
+               
+    
+            <td><a href="?action=accept&id={{i['login_id']}}" class="btn btn-success">Accept</a>
+            <a href="?action=reject&id={{i['login_id']}}" class="btn btn-danger">Reject</a></td>
+
+
+        </tr>
+
+        {%endfor%}
+
+    </table>
+</center> 
+
+<br><br><br><br><br><br><br>
+
+    {%include 'footer.html'%}
+
+
+
+</body>
+</html>

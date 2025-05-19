@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Payment View</title>
+    <style>
+
+        .payment-table {
+            width: 100%;
+            border-collapse: collapse;
+            background-color: white;
+            box-shadow: 0 6px 12px rgba(0,0,0,0.1);
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        .payment-table th {
+            background-color: #8b4513;
+            color: #f1b890;
+            padding: 15px;
+            text-align: left;
+            font-weight: bold;
+            text-transform: uppercase;
+        }
+
+        .payment-table tr {
+            transition: all 0.3s ease;
+        }
+
+        .payment-table td {
+            padding: 15px;
+            border-bottom: 1px solid #e0e0e0;
+            background-color: #f1b890;
+        }
+
+        .payment-table tr:nth-child(even) {
+            background-color: #e6b479;
+        }
+
+        .payment-table tr:hover {
+            background-color: #d4a36c;
+            transform: scale(1.01);
+        }
+
+        .payment-table img {
+            max-width: 250px;
+            max-height: 250px;
+            object-fit: cover;
+            border-radius: 8px;
+            transition: transform 0.3s ease;
+        }
+
+        .payment-table img:hover {
+            transform: scale(1.1);
+            cursor: pointer;
+        }
+
+        .payment-link {
+            display: inline-block;
+            background-color: #8b4513;
+            color: #f1b890;
+            padding: 10px 15px;
+            text-decoration: none;
+            border-radius: 5px;
+            transition: all 0.3s ease;
+            font-weight: bold;
+        }
+
+        .payment-link:hover {
+            background-color: #6b3307;
+            transform: translateY(-3px);
+            box-shadow: 0 4px 6px rgba(0,0,0,0.2);
+        }
+
+        .status-badge {
+            display: inline-block;
+            padding: 5px 10px;
+            border-radius: 4px;
+            font-weight: bold;
+        }
+
+        .status-paid {
+            background-color: #4CAF50;
+            color: white;
+        }
+
+        .status-pending {
+            background-color: #FF9800;
+            color: white;
+        }
+
+        .status-overdue {
+            background-color: #F44336;
+            color: white;
+        }
+
+        .search-container {
+            margin-bottom: 20px;
+            display: flex;
+            justify-content: center;
+        }
+
+        .search-input {
+            width: 300px;
+            padding: 10px;
+            border: 2px solid #8b4513;
+            border-radius: 5px;
+            font-size: 16px;
+        }
+
+        /* Image Modal Styles */
+        #imageModal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.9);
+            text-align: center;
+        }
+
+        #imageModal img {
+            max-width: 90%;
+            max-height: 90%;
+            margin: auto;
+            display: block;
+            margin-top: 5%;
+            border-radius: 10px;
+        }
+
+        .modal-close {
+            position: absolute;
+            top: 15px;
+            right: 35px;
+            color: white;
+            font-size: 40px;
+            cursor: pointer;
+            transition: color 0.3s ease;
+        }
+
+        .modal-close:hover {
+            color: #f1b890;
+        }
+    </style>
+</head>
+<body>
+    {%include 'users_header.html'%}
+<br><br><br><br><br>
+    <div class="search-container">
+        <input type="text" id="searchInput" class="search-input" placeholder="Search payments...">
+    </div>
+
+    <table class="payment-table" border="2">
+        <thead>
+            <tr>
+                <th>Sl.No</th>
+                <th>Product Name</th>
+                <th>Description</th>
+                <th>Images</th>
+                <th>Date</th>
+                <th>Status</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody id="paymentTableBody">
+            {%for i in data['view']%}
+            <tr>
+                <td>{{loop.index}}</td>
+                <td>{{i['product_name']}}</td>
+                <td>{{i['description']}}</td>
+                <td>
+                    <img src="{{i['image']}}" alt="Product Image" onclick="openImageModal('{{i['image']}}')">
+                </td>
+                <td>{{i['date']}}</td>
+                <td>
+                    <span class="status-badge 
+                        {%if i['status'] == 'Paid' %}status-paid
+                        {%elif i['status'] == 'Pending' %}status-pending
+                        {%elif i['status'] == 'Overdue' %}status-overdue
+                        {%endif%}">
+                        {{i['status']}}
+                    </span>
+                </td>
+                <td>
+                    <a href="/user_make_payments?id={{i['order_id']}}&amt={{i['amount']}}" class="payment-link">
+                        Make Payment
+                    </a>
+                </td>
+            </tr>
+            {%endfor%}
+        </tbody>
+    </table>
+
+    <!-- Image Modal -->
+    <div id="imageModal">
+        <span class="modal-close" onclick="closeImageModal()">&times;</span>
+        <img id="modalImage">
+    </div>
+
+    {%include 'footer.html'%}
+
+    <script>
+        // Image Modal Functions
+        function openImageModal(src) {
+            const modal = document.getElementById('imageModal');
+            const modalImg = document.getElementById('modalImage');
+            modal.style.display = "block";
+            modalImg.src = src;
+        }
+
+        function closeImageModal() {
+            document.getElementById('imageModal').style.display = "none";
+        }
+
+        // Search Functionality
+        document.getElementById('searchInput').addEventListener('input', function() {
+            const searchTerm = this.value.toLowerCase();
+            const rows = document.querySelectorAll('#paymentTableBody tr');
+
+            rows.forEach(row => {
+                const cells = row.getElementsByTagName('td');
+                let shouldShow = false;
+
+                for (let cell of cells) {
+                    if (cell.textContent.toLowerCase().includes(searchTerm)) {
+                        shouldShow = true;
+                        break;
+                    }
+                }
+
+                row.style.display = shouldShow ? '' : 'none';
+            });
+        });
+
+        // Status Color Dynamic Functionality
+        function updateStatusColors() {
+            const statusBadges = document.querySelectorAll('.status-badge');
+            statusBadges.forEach(badge => {
+                const status = badge.textContent.trim();
+                badge.classList.remove('status-paid', 'status-pending', 'status-overdue');
+                
+                switch(status) {
+                    case 'Paid':
+                        badge.classList.add('status-paid');
+                        break;
+                    case 'Pending':
+                        badge.classList.add('status-pending');
+                        break;
+                    case 'Overdue':
+                        badge.classList.add('status-overdue');
+                        break;
+                }
+            });
+        }
+
+        // Run on page load
+        document.addEventListener('DOMContentLoaded', updateStatusColors);
+    </script>
+</body>
+</html>

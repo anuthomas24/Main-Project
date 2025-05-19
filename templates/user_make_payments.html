@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Payment Form</title>
+    <style>
+      
+        .payment-container {
+            background-color: #f1b890;
+            border: 3px solid #8b4513;
+            border-radius: 12px;
+            box-shadow: 0 8px 16px rgba(0,0,0,0.1);
+            padding: 30px;
+            width: 100%;
+            max-width: 500px;
+            transition: all 0.3s ease;
+        }
+
+        .payment-form {
+            width: 100%;
+        }
+
+        .payment-form table {
+            width: 100%;
+        }
+
+        .payment-form th {
+            text-align: right;
+            color: #8b4513;
+            font-weight: bold;
+            padding-right: 15px;
+            width: 30%;
+        }
+
+        .payment-form input[type="text"] {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #8b4513;
+            border-radius: 8px;
+            font-size: 16px;
+            background-color: #ffffff;
+            transition: all 0.3s ease;
+        }
+
+        .payment-form input[type="text"]:focus {
+            outline: none;
+            border-color: #6b3307;
+            box-shadow: 0 0 8px rgba(139, 69, 19, 0.3);
+        }
+
+        .payment-form input[type="submit"] {
+            background-color: #8b4513;
+            color: #f1b890;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 8px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            width: 100%;
+            margin-top: 15px;
+        }
+
+        .payment-form input[type="submit"]:hover {
+            background-color: #6b3307;
+            transform: translateY(-3px);
+            box-shadow: 0 4px 6px rgba(0,0,0,0.2);
+        }
+
+        .payment-form input[type="submit"]:active {
+            transform: translateY(-1px);
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        @media (max-width: 600px) {
+            .payment-container {
+                margin: 20px;
+                padding: 20px;
+            }
+
+            .payment-form th {
+                text-align: center;
+                padding-bottom: 10px;
+            }
+
+            .payment-form table tr {
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    {%include 'users_header.html'%}
+<center>
+    <br><br><br><br><br>
+    <div class="payment-container">
+        <form action="" method="post" class="payment-form">
+            <table>
+                <tr>
+                    <th>Amount</th>
+                    {%if data['view']%}
+                    <td>
+                        <input 
+                            type="text" 
+                            name="amt" 
+                            value="{{data['view']}}" 
+                            readonly 
+                            title="Amount cannot be modified"
+                        >
+                    </td>
+                    {%endif%}
+                </tr>
+                <tr>
+                    <td colspan="2">
+                        <input type="submit" name="add" value="PAY">
+                    </td>
+                </tr>
+            </table>
+        </form>
+    </div>
+</center>
+    {%include 'footer.html'%}
+
+    <script>
+        // Client-side validation
+        document.querySelector('form').addEventListener('submit', function(e) {
+            const amountInput = document.querySelector('input[name="amt"]');
+            
+            // Check if amount is valid number and positive
+            if (isNaN(parseFloat(amountInput.value)) || parseFloat(amountInput.value) <= 0) {
+                e.preventDefault();
+                alert('Please enter a valid payment amount.');
+            }
+        });
+
+        // Add visual feedback for readonly input
+        const amountInput = document.querySelector('input[name="amt"]');
+        if (amountInput.readOnly) {
+            amountInput.style.backgroundColor = '#f0f0f0';
+            amountInput.style.cursor = 'not-allowed';
+        }
+    </script>
+</body>
+</html>

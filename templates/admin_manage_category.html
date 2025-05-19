@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Category Management</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+        
+        header, footer {
+            background-color: #8b4513;
+            color: #fff;
+            padding: 15px;
+            text-align: center;
+        }
+        
+        div {
+            flex-grow: 1;
+            padding: 20px;
+        }
+        
+        form {
+            background-color: #f1b890;
+            padding: 20px;
+            border-radius: 8px;
+            max-width: 500px;
+            margin: 0 auto;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        
+        table, th, td {
+            border: 2px solid #8b4513;
+        }
+        
+        th, td {
+            padding: 10px;
+            text-align: left;
+        }
+        
+        input[type="text"] {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #8b4513;
+            border-radius: 4px;
+        }
+        
+        input[type="submit"] {
+            background-color: #8b4513;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        
+        input[type="submit"]:hover {
+            background-color: #6a3509;
+        }
+        
+        a {
+            color: #8b4513;
+            text-decoration: none;
+            margin: 0 5px;
+        }
+        
+        a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    {%include 'admin_header.html'%}
+    <br><br><br><br><br><br><br><br>
+
+    <div>
+        {%if data['up']%}
+        <form action="" method="post">
+            <table>
+                <tr>
+                    <th>Category Name</th>
+                    <td><input type="text" name="cat" value="{{data['up'][0]['category_name']}}"></td>
+                </tr>
+                <tr>
+                    <td><input type="submit" name="up" value="Update"></td>
+                </tr>
+            </table>
+        </form>
+        {%else%}
+
+        <br><br><br>
+        <form action="" method="post">
+            <table>
+                <tr>
+                    <th>Category Name</th>
+                    <td><input type="text" name="cat"></td>
+                </tr>
+                <tr>
+                    <td><input type="submit" name="add" value="Add Category"></td>
+                </tr>
+            </table>
+        </form>
+
+        <table>
+            <tr>
+                <th>Sl.No</th>
+                <th>Category Name</th>
+                <th>Actions</th>
+            </tr>
+            {%for i in data['category']%}
+            <tr>
+                <td>{{loop.index}}</td>
+                <td>{{i['category_name']}}</td>
+                <td>
+                    <a href="?action=update&id={{i['category_id']}}">Update</a>
+                    <a href="?action=delete&id={{i['category_id']}}">Delete</a>
+                </td>
+            </tr>
+            {%endfor%}
+        </table>
+        {%endif%}
+    </div>
+
+    {%include 'footer.html'%}
+</body>
+</html>

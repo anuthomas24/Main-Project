@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Product Reviews</title>
+    <style>
+        /* Product Reviews Table Styling */
+        .reviews-table {
+            width: 100%;
+            max-width: 1400px;
+            margin: 20px auto;
+            border-collapse: collapse;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+        
+        .reviews-table th, 
+        .reviews-table td {
+            border: 2px solid #8b4513;
+            padding: 10px;
+            text-align: center;
+        }
+        
+        .reviews-table th {
+            background-color: #f1b890;
+            font-weight: bold;
+            color: #333;
+        }
+        
+        .reviews-table tr:nth-child(even) {
+            background-color: #f9f1e3;
+        }
+        
+        .reviews-table tr:hover {
+            background-color: #f1d0a0;
+            transition: background-color 0.3s ease;
+        }
+        
+        .reviews-table img {
+            max-width: 250px;
+            max-height: 250px;
+            object-fit: cover;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease;
+        }
+        
+        .reviews-table img:hover {
+            transform: scale(1.05);
+        }
+        
+        /* Responsive Design */
+        @media (max-width: 1200px) {
+            .reviews-table {
+                font-size: 0.9em;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .reviews-table img {
+                max-width: 150px;
+                max-height: 150px;
+            }
+            
+            /* Optional: Make table scrollable on small screens */
+            .table-container {
+                overflow-x: auto;
+            }
+        }
+    </style>
+</head>
+<body>
+    {%include 'sellers_header.html'%}
+<br><br><br><br><br>
+    <div class="table-container">
+        <table class="reviews-table" border="2">
+            <tr>
+                <th>Sl.no</th>
+                <th>Product Name</th>
+                <th>Description</th>
+                <th>Images</th>
+                <th>Rating</th>
+                <th>Review</th>
+                <th>Date</th>
+            </tr>
+            {%for i in data['view']%}
+            <tr>
+                <td>{{loop.index}}</td>
+                <td>{{i['product_name']}}</td>
+                <td>{{i['description']}}</td>
+                <td>
+                    <img src="{{i['image']}}" alt="Product image {{loop.index}}" height="250" width="250">
+                </td>
+                <td>{{i['rating']}}</td>
+                <td>{{i['review']}}</td>
+                <td>{{i['date']}}</td>
+            </tr>
+            {%endfor%}
+        </table>
+    </div>
+
+    {%include 'footer.html'%}
+</body>
+</html>

@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bid Form</title>
+    <style>
+        /* (Previous CSS remains the same) */
+    </style>
+    <script>
+        function validateBid() {
+            const amountInput = document.getElementById('amountInput');
+            const amountError = document.getElementById('amountError');
+            
+            // Safely get base amount from the first view item
+            const baseAmount = parseFloat('{{ data['view'][0].get('base_amount', 0) }}') || 0;
+            const enteredAmount = parseFloat(amountInput.value);
+
+            // Clear previous error
+            amountError.style.display = 'none';
+            amountError.textContent = '';
+
+            // Validate amount
+            if (enteredAmount < baseAmount) {
+                amountError.textContent = `Bid amount must be at least ${baseAmount}`;
+                amountError.style.display = 'block';
+                return false;
+            }
+
+            return true;
+        }
+    </script>
+</head>
+<body>
+    {%include 'users_header.html'%}
+    <br><br><br><br><br>
+
+    {%if data['view']%}
+
+    <center>
+    <form action="" method="post" id="bidForm" onsubmit="return validateBid()">
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                {% for category, message in messages %}
+                    <div class="error">{{ message }}</div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+
+        <table>
+            <tr>
+                <th>Base Amount</th>
+                <td>
+                    <input type="text" readonly value="{{ data['view'][0]['base_amount'] }}">
+                </td>
+            </tr>
+            <tr>
+                <th>Bid Amount</th>
+                <td>
+                    <input type="number" 
+                           name="amt" 
+                           id="amountInput" 
+                           placeholder="Enter the Amount" 
+                           min="{{ data['view'][0]['base_amount'] }}"
+                           step="0.01"
+                           required>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="2">
+                    <div id="amountError" class="error" style="display:none;"  ></div>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="2">
+                    <input type="submit" name="send" value="BID"  class="btn btn-success">
+                </td>
+            </tr>
+        </table>
+    </form>
+
+
+    <table  border="2"  style="margin-top: 80px; width: 800px;">
+
+        <tr>
+            <th>SL.NO</th>
+            <th>BID AMOUNT</th>
+            <th>DATE</th>
+        </tr>
+
+        {%for i in data['view']%}
+
+        <tr>
+            <td>{{loop.index}}</td>
+            <td>{{i['amount']}}</td>
+            <td>{{i['date_time']}}</td>
+        </tr>
+
+        {%endfor%}
+
+
+    </table>
+
+</center>
+    {%endif%}
+
+
+
+
+    {%include 'footer.html'%}
+
+</body>
+</html>

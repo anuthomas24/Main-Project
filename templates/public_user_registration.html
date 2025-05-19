@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Registration</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Roboto', sans-serif;
+            background: linear-gradient(135deg, #f6d365 0%, #fda085 100%);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .registration-container {
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+            padding: 40px;
+            width: 100%;
+            max-width: 500px;
+            position: relative;
+        }
+
+        .back-home-btn {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            background: none;
+            border: none;
+            font-size: 24px;
+            color: #333;
+            cursor: pointer;
+            transition: color 0.3s ease;
+        }
+
+        .back-home-btn:hover {
+            color: #fda085;
+        }
+
+        .registration-header {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 30px;
+        }
+
+        .registration-header i {
+            font-size: 48px;
+            color: #fda085;
+            margin-right: 15px;
+        }
+
+        .registration-header h2 {
+            color: #333;
+            font-weight: 700;
+        }
+
+        .registration-form {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            color: #333;
+            font-weight: 500;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 16px;
+            transition: border-color 0.3s ease;
+        }
+
+        .form-control:focus {
+            outline: none;
+            border-color: #fda085;
+            box-shadow: 0 0 5px rgba(253, 160, 133, 0.5);
+        }
+
+        .submit-btn {
+            background: linear-gradient(135deg, #f6d365 0%, #fda085 100%);
+            color: white;
+            border: none;
+            padding: 12px;
+            border-radius: 5px;
+            font-size: 18px;
+            cursor: pointer;
+            transition: transform 0.2s ease;
+        }
+
+        .submit-btn:hover {
+            transform: scale(1.05);
+        }
+
+        .username-status {
+            margin-top: 5px;
+            font-size: 14px;
+        }
+
+        @media (max-width: 600px) {
+            .registration-container {
+                padding: 20px;
+                width: 95%;
+            }
+
+            .registration-header {
+                flex-direction: column;
+                text-align: center;
+            }
+
+            .registration-header i {
+                margin-right: 0;
+                margin-bottom: 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="registration-container">
+        <button onclick="window.location.href='/'" class="back-home-btn" title="Back to Home">
+            <i class="fas fa-arrow-left"></i>
+        </button>
+
+        <div class="registration-header">
+            <i class="fas fa-user-plus"></i>
+            <h2>User Registration</h2>
+        </div>
+
+        <form action="" method="post" class="registration-form" onsubmit="return validateForm()">
+            <div class="form-group">
+                <label for="fname">First Name</label>
+                <input type="text" name="fname" id="fname" class="form-control" required>
+            </div>
+
+            <div class="form-group">
+                <label for="lname">Last Name</label>
+                <input type="text" name="lname" id="lname" class="form-control" required>
+            </div>
+
+            <div class="form-group">
+                <label for="place">Place</label>
+                <input type="text" name="place" id="place" class="form-control" required>
+            </div>
+
+            <div class="form-group">
+                <label for="phone">Phone</label>
+                <input type="tel" name="phone" id="phone" class="form-control" required>
+            </div>
+
+            <div class="form-group">
+                <label for="mail">Email</label>
+                <input type="email" name="mail" id="mail" class="form-control" required>
+            </div>
+
+            <div class="form-group">
+                <label for="uname">User Name</label>
+                <input type="text" name="uname" id="uname" class="form-control" required onkeyup="checkUsername()">
+                <div id="username-status" class="username-status"></div>
+            </div>
+
+            <div class="form-group">
+                <label for="pwd">Password</label>
+                <input type="password" name="pwd" id="pwd" class="form-control" required>
+            </div>
+
+            <div class="form-group">
+                <button type="submit" name="add" class="submit-btn">Register</button>
+            </div>
+        </form>
+    </div>
+
+    <script>
+    let isUsernameAvailable = false;
+
+    function checkUsername() {
+        const username = document.getElementById('uname').value;
+        const statusSpan = document.getElementById('username-status');
+        
+        if(username.length < 3) {
+            statusSpan.innerHTML = "Username must be at least 3 characters";
+            statusSpan.style.color = "red";
+            isUsernameAvailable = false;
+            return;
+        }
+
+        $.ajax({
+            url: '/check_username',
+            type: 'POST',
+            data: {username: username},
+            success: function(response) {
+                if(response.available) {
+                    statusSpan.innerHTML = "Username is available";
+                    statusSpan.style.color = "green";
+                    isUsernameAvailable = true;
+                } else {
+                    statusSpan.innerHTML = "Username already exists";
+                    statusSpan.style.color = "red";
+                    isUsernameAvailable = false;
+                }
+            }
+        });
+    }
+
+    function validateForm() {
+        if (!isUsernameAvailable) {
+            alert("Please choose a different username");
+            return false;
+        }
+        return true;
+    }
+    </script>
+</body>
+</html>
